@@ -5,17 +5,15 @@
 */
 
 FeedDialogGENERAL(ByRef _WinID, _path) {
-    global DialogType
 
     WinActivate, ahk_id %_WinID%
     Sleep, 50
 
-    ; Focus Edit1
     ControlFocus Edit1, ahk_id %_WinID%
     WinGet, ActivecontrolList, ControlList, ahk_id %_WinID%
-
+    
     Loop, Parse, ActivecontrolList, `n  
-    {       ; which addressbar and "Enter" controls to use   
+    {       
         if InStr(A_LoopField, "ToolbarWindow32") {
             ControlGet, _ctrlHandle, Hwnd, , %A_LoopField%, ahk_id %_WinID%
             _parentHandle := DllCall("GetParent", "Ptr", _ctrlHandle)
@@ -76,8 +74,6 @@ FeedDialogGENERAL(ByRef _WinID, _path) {
 ;
 FeedDialogSYSLISTVIEW(ByRef _WinID, _path) {
 ;─────────────────────────────────────────────────────────────────────────────
-
-    global DialogType
 
     WinActivate, ahk_id %_WinID%
     ControlGetText _editOld, Edit1, ahk_id %_WinID%
