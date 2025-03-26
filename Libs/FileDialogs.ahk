@@ -189,30 +189,23 @@ GetFileDialog(ByRef _DialogID) {
 
     ; Detection of a File dialog. Returns FuncObj / false
 
-    ; Only consider this dialog a possible file-dialog when:
-    ; (SysListView321 and ToolbarWindow321) or (DirectUIHWND1 and ToolbarWindow321) controls detected
-    ; First is for Notepad++; second for all other filedialogs
-    ; dw: (SysListView321 and SysHeader321 and Edit1) is for some AutoDesk products (e.g. AutoCAD, Revit, Navisworks)
-    ; which need a delay loop to switch correctly between the dialog components!
-    
     WinGet, _controlList, ControlList, ahk_id %_DialogID%
-
     _SysListView321 := _SysHeader321 := _ToolbarWindow321 := _DirectUIHWND1 := _Edit1 := _SysTreeView321 := 0
     
     Loop, Parse, _controlList, `n 
     {
-    if (A_LoopField == "SysListView321")
-        _SysListView321 := 1
-    else if (A_LoopField == "SysHeader321")
-        _SysHeader321 := 1
-    else if (A_LoopField == "ToolbarWindow321")
-        _ToolbarWindow321 := 1
-    else if (A_LoopField == "DirectUIHWND1")
-        _DirectUIHWND1 := 1
-    else if (A_LoopField == "Edit1")
-        _Edit1 := 1
-    else if (A_LoopField == "SysTreeView321")
-        _SysTreeView321 := 1
+        if (A_LoopField == "SysListView321")
+            _SysListView321 := 1
+        else if (A_LoopField == "SysHeader321")
+            _SysHeader321 := 1
+        else if (A_LoopField == "ToolbarWindow321")
+            _ToolbarWindow321 := 1
+        else if (A_LoopField == "DirectUIHWND1")
+            _DirectUIHWND1 := 1
+        else if (A_LoopField == "Edit1")
+            _Edit1 := 1
+        else if (A_LoopField == "SysTreeView321")
+            _SysTreeView321 := 1
     }
     
     if (_DirectUIHWND1 and _ToolbarWindow321 and _Edit1)
