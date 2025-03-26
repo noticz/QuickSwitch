@@ -11,9 +11,9 @@ FeedDialogGENERAL(ByRef _WinID, _path) {
 
     ControlFocus Edit1, ahk_id %_WinID%
     WinGet, ActivecontrolList, ControlList, ahk_id %_WinID%
-    
-    Loop, Parse, ActivecontrolList, `n  
-    {       
+
+    Loop, Parse, ActivecontrolList, `n
+    {
         if InStr(A_LoopField, "ToolbarWindow32") {
             ControlGet, _ctrlHandle, Hwnd, , %A_LoopField%, ahk_id %_WinID%
             _parentHandle := DllCall("GetParent", "Ptr", _ctrlHandle)
@@ -66,7 +66,7 @@ FeedDialogGENERAL(ByRef _WinID, _path) {
     } else {
         MsgBox This type of dialog can not be handled (yet).`nPlease report it!
         LogError(Exception("File dialog", "This type of dialog can not be handled!", "`'Breadcrumb Parent`' and `'msctls_progress32`' controls not found"))
-    }    
+    }
     Return
 }
 
@@ -95,26 +95,26 @@ FeedDialogSYSLISTVIEW(ByRef _WinID, _path) {
     ControlSend SysListView321, {Home}, ahk_id %_WinID%
 
     Loop, 100 {
-        Sleep, 10 
+        Sleep, 10
         ControlSend SysListView321, ^{Space}, ahk_id %_WinID%
         ControlGet, _Focus, List, Selected, SysListView321, ahk_id %_WinID%
 
     } Until !_Focus
-    
+
     _pathSet := false
     Loop, 20 {
         Sleep, 10
         ControlSetText, Edit1, %_path%, ahk_id %_WinID%
         ControlGetText, _Edit1, Edit1, ahk_id %_WinID%
 
-        if (_Edit1 == _path)        
+        if (_Edit1 == _path)
             _pathSet := true
 
     } Until _pathSet
 
     if _pathSet {
         Sleep, 20
-        ControlFocus Edit1, ahk_id %_WinID% 
+        ControlFocus Edit1, ahk_id %_WinID%
         ControlSend Edit1, {Enter}, ahk_id %_WinID%
 
         ; Restore original filename / make empty in case of previous path
@@ -148,7 +148,7 @@ FeedDialogSYSTREEVIEW(ByRef _WinID, _path) {
     _path := RTrim(_path , "\")
     _path := _path . "\"
     _pathSet := false
-    
+
     Loop, 20 {
         Sleep, 10
         ControlSetText, Edit1, %_path%, ahk_id %_WinID%
@@ -161,7 +161,7 @@ FeedDialogSYSTREEVIEW(ByRef _WinID, _path) {
 
     if _pathSet {
         Sleep, 20
-        ControlFocus Edit1, ahk_id %_WinID% 
+        ControlFocus Edit1, ahk_id %_WinID%
         ControlSend Edit1, {Enter}, ahk_id %_WinID%
 
         ; Restore original filename / make empty in case of previous path
@@ -170,16 +170,14 @@ FeedDialogSYSTREEVIEW(ByRef _WinID, _path) {
         Sleep, 20
 
         Loop, 5 {
-            ControlSetText, Edit1, %_editOld%, ahk_id %_WinID%             ; set
+            ControlSetText, Edit1, %_editOld%, ahk_id %_WinID%        ; set
             Sleep, 15
             ControlGetText, _editContent, Edit1, ahk_id %_WinID%      ; check
 
             if (_editContent == _editOld)
                 Break
-        
         }
     }
-
     Return
 }
 
@@ -192,8 +190,8 @@ GetFileDialog(ByRef _DialogID) {
 
     WinGet, _controlList, ControlList, ahk_id %_DialogID%
     _SysListView321 := _SysHeader321 := _ToolbarWindow321 := _DirectUIHWND1 := _Edit1 := _SysTreeView321 := 0
-    
-    Loop, Parse, _controlList, `n 
+
+    Loop, Parse, _controlList, `n
     {
         if (A_LoopField == "SysListView321")
             _SysListView321 := 1
@@ -208,19 +206,19 @@ GetFileDialog(ByRef _DialogID) {
         else if (A_LoopField == "SysTreeView321")
             _SysTreeView321 := 1
     }
-    
+
     if (_DirectUIHWND1 and _ToolbarWindow321 and _Edit1)
         Return Func("FeedDialogGENERAL")
-    
+
     else if (_SysListView321 and _ToolbarWindow321 and _Edit1 and _SysHeader321)
         Return Func("FeedDialogSYSTREEVIEW")
-    
+
     else if (_SysListView321 and _ToolbarWindow321 and _Edit1)
         Return Func("FeedDialogSYSLISTVIEW")
-    
+
     else if (_SysListView321 and _SysHeader321 and _Edit1)
         Return Func("FeedDialogSYSLISTVIEW")
-    
+
     else
         Return false
 }
