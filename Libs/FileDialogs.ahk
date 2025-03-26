@@ -100,7 +100,8 @@ FeedDialogSYSLISTVIEW(ByRef _WinID, _path) {
         ControlGet, _Focus, List, Selected, SysListView321, ahk_id %_WinID%
 
     } Until !_Focus
-
+    
+    _pathSet := false
     Loop, 20 {
         Sleep, 10
         ControlSetText, Edit1, %_path%, ahk_id %_WinID%
@@ -146,7 +147,8 @@ FeedDialogSYSTREEVIEW(ByRef _WinID, _path) {
     ; Make sure there exactly one slash at the end.
     _path := RTrim(_path , "\")
     _path := _path . "\"
-
+    _pathSet := false
+    
     Loop, 20 {
         Sleep, 10
         ControlSetText, Edit1, %_path%, ahk_id %_WinID%
