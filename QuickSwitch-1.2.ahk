@@ -12,15 +12,15 @@
 ;@Ahk2Exe-PostExec "C:\Program Files\7-Zip\7zG.exe" a "%A_ScriptDir%\Releases\%U_name%".zip -tzip -sae -- "%A_ScriptDir%\%U_name%.ahk" "%A_ScriptDir%\Libs" "%A_ScriptDir%\QuickSwitch.ico",, A_ScriptDir
 
 /*
-    Modification by Rafaello: 
+    Modification by Rafaello:
     https://github.com/JoyHak/QuickSwitch
-    
-    Based on v0.5dw9a by NotNull, DaWolfi and Tuska: 
+
+    Based on v0.5dw9a by NotNull, DaWolfi and Tuska:
     https://www.voidtools.com/forum/viewtopic.php?f=2&t=9881
-    
-    
-    This is the main file that is waiting for the dialog window to appear. 
-    Then initializes the menu display. 
+
+
+    This is the main file that is waiting for the dialog window to appear.
+    Then initializes the menu display.
     The hotkey is declared once and linked to the ShowPathsMenu().
 */
 
@@ -32,7 +32,7 @@
 FileEncoding, UTF-8
 SetWorkingDir %A_ScriptDir%
 
-global ScriptName := "QuickSwitch" 
+global ScriptName := "QuickSwitch"
 global INI := ScriptName ".ini"
 global ERRORS := "Errors.log"
 
@@ -54,9 +54,9 @@ ValidateLog()
 ValidateAutoStartup()
 
 ValidateWriteKey(MainKey, 		"MainKey",      "ShowPathsMenu",    "Off")
-ValidateWriteKey(RestartKey, 	"RestartKey",   "RestartApp",       "On") 
-Menu, Tray, UseErrorLevel 
-Menu, Tray, Icon, %MainIcon% 
+ValidateWriteKey(RestartKey, 	"RestartKey",   "RestartApp",       "On")
+Menu, Tray, UseErrorLevel
+Menu, Tray, Icon, %MainIcon%
 
 ; Wait for dialog
 Loop {
@@ -66,10 +66,10 @@ Loop {
 
     ; if there is any GUI left from previous calls....
     Gui, Destroy
-    
+
     IniRead, MainKey, %INI%, App, MainKey
-    if FileDialog 
-    {                                                       ; This is a supported dialog    
+    if FileDialog
+    {                                                       ; This is a supported dialog
         GetPaths()
         WinGet, ahk_exe, ProcessName, ahk_id %DialogID%
         WinGetTitle, window_title, ahk_id %DialogID%
@@ -77,14 +77,14 @@ Loop {
 
         ; Check if FingerPrint entry is already in INI, so we know what to do.
         IniRead, DialogAction, %INI%, Dialogs, %FingerPrint%, 0
-        if (DialogAction == 1) {                                           ; ======= AutoSwitch ==        
+        if (DialogAction == 1) {                                           ; ======= AutoSwitch ==
             AutoSwitch()
-        } else if (DialogAction == 0) {                                    ; ======= Never here ==        
+        } else if (DialogAction == 0) {                                    ; ======= Never here ==
             if ShouldOpen() {
                 ShowPathsMenu()         ; AutoOpenMenu only
             }
         }
-        else if ShouldOpen() {                                             ; ======= Show Menu ==        
+        else if ShouldOpen() {                                             ; ======= Show Menu ==
             ShowPathsMenu()             ; hotkey or AutoOpenMenu
         }
 
@@ -98,13 +98,13 @@ Loop {
     Sleep, 100
     WinWaitNotActive
 
-    ; Clean up        
-    Hotkey, %MainKey%, Off    
+    ; Clean up
+    Hotkey, %MainKey%, Off
     ahk_exe         := ""
     window_title    := ""
     DialogAction    := ""
     DialogID        := ""
-    
+
 }   ; End of continuous WinWaitActive loop
 
 LogError(Exception("Main menu", "An error occurred while waiting for the file dialog to appear. Restart the app manually", "End of continuous WinWaitActive loop in main file"))

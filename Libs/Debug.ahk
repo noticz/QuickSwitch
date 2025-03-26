@@ -27,7 +27,7 @@ DebugExport() {
         oFile:=""
 
         Msgbox Results exported to:`n`n"%_filename%"
-    } else {                                          ; File could not be initialized    
+    } else {                                          ; File could not be initialized
         Msgbox Cant create %_fileName%
     }
     Return
@@ -44,7 +44,7 @@ ShowDebugMenu() {
     ; Add ControlGetPos [, X, Y, Width, Height, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]
     ; Change dir to ahk
     ; Change name to fingerpringt.csv
-       
+
     global GuiColor
     GUI, Destroy
 
@@ -54,7 +54,7 @@ ShowDebugMenu() {
     ; Loop through controls
     WinGet, ActivecontrolList, ControlList, A
 
-    Loop, Parse, ActivecontrolList, `n 
+    Loop, Parse, ActivecontrolList, `n
     {
         ;Get ID
         ControlGet, _ctrlHandle, Hwnd, , %A_LoopField%, A
