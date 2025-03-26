@@ -221,9 +221,6 @@ GetFileDialog(ByRef _DialogID) {
     else if (_SysListView321 and _SysHeader321 and _Edit1)
         Return Func("FeedDialogSYSLISTVIEW")
     
-    else if (_SysTreeView321 and _Edit1)
-        Return Func("FeedDialogSYSTREEVIEW")
-    
     else
         Return false
 }
