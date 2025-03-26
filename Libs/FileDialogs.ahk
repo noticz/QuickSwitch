@@ -114,7 +114,8 @@ FeedDialogSYSLISTVIEW(ByRef _WinID, _path) {
 
     if _pathSet {
         Sleep, 20
-        ControlFocus Edit1, ahk_id %_WinID% ControlSend Edit1, {Enter}, ahk_id %_WinID%
+        ControlFocus Edit1, ahk_id %_WinID% 
+        ControlSend Edit1, {Enter}, ahk_id %_WinID%
 
         ; Restore original filename / make empty in case of previous path
         Sleep, 15
@@ -130,7 +131,6 @@ FeedDialogSYSLISTVIEW(ByRef _WinID, _path) {
                 Break
         }
     }
-
     Return
 }
 
@@ -161,7 +161,8 @@ FeedDialogSYSTREEVIEW(ByRef _WinID, _path) {
 
     if _pathSet {
         Sleep, 20
-        ControlFocus Edit1, ahk_id %_WinID% ControlSend Edit1, {Enter}, ahk_id %_WinID%
+        ControlFocus Edit1, ahk_id %_WinID% 
+        ControlSend Edit1, {Enter}, ahk_id %_WinID%
 
         ; Restore original filename / make empty in case of previous path
         Sleep, 15
