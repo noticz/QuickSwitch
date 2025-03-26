@@ -65,8 +65,8 @@ FeedDialogGENERAL(ByRef _WinID, _path) {
         }
     } else {
         MsgBox This type of dialog can not be handled (yet).`nPlease report it!
+        LogError(Exception("File dialog", "This type of dialog can not be handled!", "`'Breadcrumb Parent`' and `'msctls_progress32`' controls not found"))
     }    
-
     Return
 }
 
