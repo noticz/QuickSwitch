@@ -20,6 +20,7 @@ It has two modes:
 
 And of course you can customize the display of paths in the menu to your liking:
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/settings.png)
+![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/settings.gif)
 
 [The latest versions](https://github.com/JoyHak/QuickSwitch/releases) include the following features:
 
@@ -28,6 +29,10 @@ And of course you can customize the display of paths in the menu to your liking:
 - The path can be displayed in a shortened form.
 - Improved settings interface and additional customization options and features.
 - Added minimalistic display of errors about incorrectly entered settings.
+
+As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big-Sur-2-Windows-10-Themes-861727886) or [CakeOS](https://www.deviantart.com/niivu/art/cakeOS-2-0-for-Windows-11-953541433) themes from Niivu and [XYplorer](https://www.xyplorer.com/index.php) file manager:
+![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/xyplorer.png)
+
 
 ## Performance
 
