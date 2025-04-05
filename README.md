@@ -3,10 +3,10 @@ This is an improved version of the [QuickSwitch script v0.5](https://github.com/
 ## About
 
 Imagine you want to open/save a file. A dialog box appears, allowing you to manually select the directory on your system. QuickSwitch lets you automatically switch to the path you need if it's open in any of the supported file managers (File Explorer, Directory Opus, Total Commander, XYPlorer). 
-![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/menu.gif)
+![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/white.png)
 
 In short, this compact menu will display all suitable paths:
-![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/menu.png)
+![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/menu.gif)
 
 It has two modes:
 
