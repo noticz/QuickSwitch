@@ -20,13 +20,6 @@ body:
       description: A clear and concise description of what the problem is. Without log
     validations:
       required: true
-
-  - type: textarea
-    attributes:
-      label: Images
-      description: Attach screenshots with an error in MsgBox. If necessary, attach screenshots not directly related to the error. Or attach gif with unusual behavior. 
-    validations:
-      required: true
   
   - type: textarea
     attributes:
@@ -34,3 +27,10 @@ body:
       description: Attach Errors.log file from script directory
     validations:
       required: true
+
+  - type: textarea
+    attributes:
+      label: Images
+      description: Attach screenshots with an error in MsgBox. If necessary, attach screenshots not directly related to the error. Or attach gif with unusual behavior. 
+    validations:
+      required: false
