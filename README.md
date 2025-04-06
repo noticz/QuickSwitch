@@ -106,18 +106,11 @@ C:\Program Files\AutoHotkey\v1.1.37.02\AutoHotkeyU32.exe
 > - Ability to tweak several miscellaneous aspects of compilation.
 > - Ability to remove code sections from the compiled script and vice versa.
 
-## To-Do
-- auto-check for update (lib and setting)
+## Need help with
+- Auto-check for update (lib and setting)
 - AutoSwitch on clipboard change
-- drag and drop any file field
+- Drag and drop any file field
 - Pin favourite paths
-- `Explorer`: 
-  - QTTabBar tabs
-  - Win11 support
-  - MRU
-
-### Need help with:
+- `QTTabBar` (get all tabs)
 - `Autohotkey v2` port
-- `File managers`:
-  - tabs from all panes
-  - new file managers support
+- New file managers support
