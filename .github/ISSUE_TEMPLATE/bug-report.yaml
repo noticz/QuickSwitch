@@ -17,7 +17,7 @@ body:
   - type: textarea
     attributes:
       label: Problem Description
-      description: A clear and concise description of what the problem is.
+      description: A clear and concise description of what the problem is. Without log
     validations:
       required: true
 
@@ -31,6 +31,6 @@ body:
   - type: textarea
     attributes:
       label: Log
-      description: Add Errors.log from script directory
+      description: Attach Errors.log file from script directory
     validations:
       required: true
