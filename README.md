@@ -1,33 +1,34 @@
-This is an improved version of the [QuickSwitch script v0.5](https://github.com/gepruts/QuickSwitch) from Gepruts. [DaWolfi, NotNull and Tuska](https://www.voidtools.com/forum/viewtopic.php?t=9881) first improved it to [v0.5dw9a](https://www.voidtools.com/forum/download/file.php?id=2235), and I've now [released v1.0](https://github.com/JoyHak/QuickSwitch/releases), where I've made some really significant improvements!
+This is an improved version of the [QuickSwitch script v0.5](https://github.com/gepruts/QuickSwitch) from Gepruts. [DaWolfi, NotNull and Tuska](https://www.voidtools.com/forum/viewtopic.php?t=9881) first improved it to [v0.5dw9a](https://www.voidtools.com/forum/download/file.php?id=2235).
+
+[New versions](https://github.com/JoyHak/QuickSwitch/releases) displays all open tabs and contains new powerful options. 
 
 ## About
 
 Imagine you want to open/save a file. A dialog box appears, allowing you to manually select the directory on your system. QuickSwitch lets you automatically switch to the path you need if it's open in any of the supported file managers (File Explorer, Directory Opus, Total Commander, XYPlorer). 
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/white.png)
 
-In short, this compact menu will display all suitable paths:
+**Menu** displays a list of opened paths (tabs from file managers). Select any path to change path in file dialog:
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/menu.gif)
 
-It has two modes:
-
-1. **Menu mode**: displays a list of opened directories. Selecting one switches the file dialog to that path. The menu won't appear if no directories are open.
-
-2. **AutoSwitch mode**: the file dialog automatically opens the last active directory in the file manager when you `Alt-Tab` between them. If the file manager was active before opening the dialog, it opens that directory immediately. You can still use `Ctr+Q` to access the menu if needed.
-
-**AutoSwitch** can be disabled using the `Never` option. There's also `Never here` option to disable QuickSwitch for specific dialogs, like web browsers or backup applications.
+Enable **Auto Switch** option to automatically change path in file dialog. If the file manager was active before opening the dialog, QuickSwitch opens it's directory immediately:
 
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/autoswitch.gif)
 
-And of course you can customize the display of paths in the menu to your liking:
+You can add specific file dialog to the **black List** to disable QuickSwitch in web browser or another app. Use `Ctr+Q` to access the Menu if needed.
+
+These options work separately for each window, which makes it possible to customize the application for each dialog.
+
+And of course you can customize the display of paths in the Menu:
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/settings.png)
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/settings.gif)
 
 [The latest versions](https://github.com/JoyHak/QuickSwitch/releases) include the following features:
 
 - Added application auto-startup at Windows log-on.
-- The menu will display the paths from all open folders starting from the current one. 
+- The menu will display the paths from all open tabs starting from the current one. 
 - The path can be displayed in a shortened form.
 - Improved settings interface and additional customization options and features.
+- Significantly improved performance.
 - Added minimalistic display of errors about incorrectly entered settings.
 
 As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big-Sur-2-Windows-10-Themes-861727886) or [CakeOS](https://www.deviantart.com/niivu/art/cakeOS-2-0-for-Windows-11-953541433) themes from Niivu and [XYplorer](https://www.xyplorer.com/index.php) file manager:
