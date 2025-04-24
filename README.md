@@ -14,7 +14,7 @@ Enable **Auto Switch** option to automatically change path in file dialog. If th
 
 ![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/autoswitch.gif)
 
-You can add specific file dialog to the **black List** to disable QuickSwitch in web browser or another app. Use `Ctr+Q` to access the Menu if needed.
+You can add specific file dialog to the **Black List** to disable QuickSwitch in web browser or another app. Use `Ctr+Q` to access the Menu if needed.
 
 These options work separately for each window, which makes it possible to customize the application for each dialog.
 
