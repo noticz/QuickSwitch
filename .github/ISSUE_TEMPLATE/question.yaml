@@ -8,8 +8,9 @@ body:
       label: Checks
       options:
         - label: >
-           This is not a bug/code review
-        
+           This is not a bug / code review
+          required: true
+          
   - type: textarea
     attributes:
       label: Question
