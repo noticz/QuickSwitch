@@ -23,7 +23,7 @@ body:
     validations:
       required: true
   
-  - type: textmate
+  - type: textarea
     validations:
       required: true
     attributes:
