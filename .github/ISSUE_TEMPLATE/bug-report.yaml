@@ -23,16 +23,16 @@ body:
     validations:
       required: true
   
-  - type: textarea
-    attributes:
-      label: Errors log
-      description: Attach Errors.log file from script directory
+  - type: textmate
     validations:
       required: true
-    value: >
+    attributes:
+      label: Errors log
+      description: Attach Errors.log file from script directory    
+      value: >
         ```js
-        Replace this line with the important log contents.
-
+        
+        Replace this line with the log contents.
 
         ```
         
