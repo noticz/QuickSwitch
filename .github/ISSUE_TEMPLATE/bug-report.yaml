@@ -13,8 +13,8 @@ body:
       options:
         - label: >
             I tried to fix the problem myself by reading the contents of the Errors.log
-      validations:
-       required: true
+    validations:
+      required: true
   
   - type: textarea
     attributes:
