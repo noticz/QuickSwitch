@@ -31,9 +31,9 @@ body:
       description: Attach Errors.log file from script directory    
       value: >
         ```js
-        </br>
+        
         Replace this line with the log contents.
-        </br>
+        
         ```
         
   - type: textarea
