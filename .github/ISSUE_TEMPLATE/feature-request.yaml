@@ -6,7 +6,7 @@ body:
   - type: textarea
     attributes:
       label: Description
-      description: Describe your idea
+      description: A clear and concise description of any features you've considered
       placeholder: I want...
     validations:
       required: true
