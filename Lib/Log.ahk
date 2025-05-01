@@ -45,21 +45,23 @@ LogInfo(ByRef msg, _silent := false) {
 
 LogHeader() {
     ; Header about log and OS
-    global ErrorsLog, BugReportLink, ScriptName
+    global ErrorsLog, ScriptName
 
-    static reg := "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
-    RegRead, _OSname, % reg, ProductName
-    RegRead, _OSversion, % reg, DisplayVersion
-    RegRead, _OSbuild, % reg, CurrentBuild
+    static REPORT_LINK  :=  "https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml"
+    static LEAF         :=  "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion"
+
+    RegRead, _OSname, % LEAF, ProductName
+    RegRead, _OSversion, % LEAF, DisplayVersion
+    RegRead, _OSbuild, % LEAF, CurrentBuild
     RegRead, _lang, HKEY_CURRENT_USER\Control Panel\International, LocaleName
 
-    FileAppend,
+    FileAppend, % "
     (LTrim
-     Report about error: %BugReportLink%
-     AHK %A_AhkVersion%
-     %_OSname% %_OSversion% | %_OSbuild% %_lang%
+        Report about error: " REPORT_LINK "
+        AHK " A_AhkVersion "
+        " _OSname " " _OSversion " | " _OSbuild " " _lang "
 
-    ), % ErrorsLog
+    )", % ErrorsLog
 }
 
 LogVersion() {
@@ -79,7 +81,7 @@ LogVersion() {
     FileAppend, % _header, % ErrorsLog
 }
 
-ValidateLog() {
+InitLog() {
     global INI, ErrorsLog, ScriptName
 
     if FileExist(ErrorsLog) {
@@ -93,7 +95,7 @@ ValidateLog() {
     if !FileExist(ErrorsLog) {
         LogHeader()
         LogVersion()
-        Return
+        return
     }
 
     ; does the cur. dir. match the dir. of the script that previously created this log?

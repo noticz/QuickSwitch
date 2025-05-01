@@ -27,8 +27,21 @@ SetDefaultValues() {
     */
     global
 
-    MainKeyHook := ShowNoSwitch := ShowAfterSettings := AutoStartup := true
-    RestartKeyHook := AutoSwitch := ShowAlways := ShowAfterSelect := CloseDialog := PathNumbers := ShortPath := ShortenEnd := ShowDriveLetter := ShowFirstSeparator := false
+    AutoStartup         :=  true
+    MainKeyHook         :=  true
+    ShowNoSwitch        :=  true
+    ShowAfterSettings   :=  true
+
+    AutoSwitch          :=  false
+    ShowAlways          :=  false
+    ShowAfterSelect     :=  false
+    RestartKeyHook      :=  false
+    CloseDialog         :=  false
+    PathNumbers         :=  false
+    ShortPath           :=  false
+    ShortenEnd          :=  false
+    ShowDriveLetter     :=  false
+    ShowFirstSeparator  :=  false
 
     GuiColor := MenuColor := ""
 
@@ -37,206 +50,233 @@ SetDefaultValues() {
     DirNameLength  := 20
     PathSeparator  := "\"
 
+    RestartWhere   := "ahk_exe notepad++.exe"
     MainFont       := "Tahoma"
     MainKey        := "^sc10"
     RestartKey     := "^sc1F"
-    RestartWhere   := "ahk_exe notepad++.exe"
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
 WriteValues() {
 ;─────────────────────────────────────────────────────────────────────────────
-    /*
-        Calls validators and writes values to INI.
+      /*
+          Calls validators and writes values to INI
 
-        The status of the checkboxes from the settings menu is writed immediately.
-        Strings and colors from fields are checked before writing.
-
-        File, section, param name, global var and its value reference
-        must be identical to ReadValues()
-    */
+          The boolean (checkbox) values is writed immediately.
+          The individual special values are checked before writing.
+      */
     global
 
+    Values := "
+    (LTrim
+         AutoStartup="          AutoStartup           "
+         AutoSwitch="           AutoSwitch            "
+         ShowAlways="           ShowAlways            "
+         ShowNoSwitch="         ShowNoSwitch          "
+         ShowAfterSelect="      ShowAfterSelect       "
+         ShowAfterSettings="    ShowAfterSettings     "
+         CloseDialog="          CloseDialog           "
+         PathNumbers="          PathNumbers           "
+         ShortPath="            ShortPath             "
+         ShortenEnd="           ShortenEnd            "
+         ShowDriveLetter="      ShowDriveLetter       "
+         ShowFirstSeparator="   ShowFirstSeparator    "
+         DirsCount="            DirsCount             "
+         DirNameLength="        DirNameLength         "
+         MainFont="             MainFont              "
+         RestartWhere="         RestartWhere          "
+         MainKeyHook="          MainKeyHook           "
+         RestartKeyHook="       RestartKeyHook        "
+    )"
+
+    Values .= "`n"
+            . ValidateTrayIcon( "MainIcon",             MainIcon)
+            . ValidateColor(    "GuiColor",             GuiColor)
+            . ValidateColor(    "MenuColor",            MenuColor)
+            . ValidateString(   "PathSeparator",        PathSeparator)
+            . ValidateString(   "ShortNameIndicator",   ShortNameIndicator)
+            . ValidateKey(      "MainKey",              MainKey,            MainKeyHook,        "Off",      "ShowMenu")
+            . ValidateKey(      "RestartKey",           RestartKey,         RestartKeyHook,     "On",       "RestartApp")
+
     try {
-        ;           value                       INI name    section     param name
-        IniWrite,   %AutoStartup%,              %INI%,      App,        AutoStartup
-        IniWrite,   %MainFont%,                 %INI%,      App,        MainFont
-        IniWrite,   %RestartWhere%,             %INI%,      App,        RestartWhere
-        IniWrite,   %MainKeyHook%,              %INI%,      App,        MainKeyHook
-        IniWrite,   %RestartKeyHook%,           %INI%,      App,        RestartKeyHook
-        IniWrite,   %LastTabSettings%,          %INI%,      App,        LastTabSettings
-        IniWrite,   %AutoSwitch%,               %INI%,      Menu,       AutoSwitch
-        IniWrite,   %ShowAlways%,               %INI%,      Menu,       ShowAlways
-        IniWrite,   %ShowNoSwitch%,             %INI%,      Menu,       ShowNoSwitch
-        IniWrite,   %ShowAfterSettings%,        %INI%,      Menu,       ShowAfterSettings
-        IniWrite,   %ShowAfterSelect%,          %INI%,      Menu,       ShowAfterSelect
-        IniWrite,   %CloseDialog%,              %INI%,      Menu,       CloseDialog
-        IniWrite,   %ShortPath%,                %INI%,      Menu,       ShortPath
-        IniWrite,   %PathNumbers%,              %INI%,      Menu,       PathNumbers
-        IniWrite,   %ShowDriveLetter%,          %INI%,      Menu,       ShowDriveLetter
-        IniWrite,   %ShortenEnd%,               %INI%,      Menu,       ShortenEnd
-        IniWrite,   %ShowFirstSeparator%,       %INI%,      Menu,       ShowFirstSeparator
-        IniWrite,   %DirsCount%,                %INI%,      Menu,       DirsCount
-        IniWrite,   %DirNameLength%,            %INI%,      Menu,       DirNameLength
+        IniWrite, % Values, % INI, Global
     } catch {
-        LogError(Exception("Failed to write values to the configuration"
-                            , INI . " write"
-                            , "Create INI file manually or change the INI global variable"))
+        LogError(Exception("Please create this file with UTF-16 LE BOM encoding manually: `'" INI "`'"
+                           , "config"
+                           , ValidateFile(INI)))
     }
-
-    ValidateWriteString(PathSeparator,      "PathSeparator")
-    ValidateWriteString(ShortNameIndicator, "ShortNameIndicator")
-
-    ValidateWriteKey(MainKey,       "MainKey",    "ShowMenu",   "Off",  MainKeyHook)
-    ValidateWriteKey(RestartKey,    "RestartKey", "RestartApp", "On",   RestartKeyHook)
-
-    ValidateWriteColor(GuiColor,    "GuiColor")
-    ValidateWriteColor(MenuColor,   "MenuColor")
-    ValidateWriteTrayIcon(MainIcon, "MainIcon")
+    Values := ""
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
 ReadValues() {
 ;─────────────────────────────────────────────────────────────────────────────
-    /*
-        Reads values from INI.
-
-        All global variables are updated if:
-        - the configuration exists
-        - values exist in the configuration
-        - variables have been declared
-
-        File, section, param name, global var and its value reference
-        must be identical to WriteValues()
-    */
+    ; Reads values from INI
     global
 
-    ;           global                      INI name    section     param name                  default value
-    IniRead,    AutoStartup,                %INI%,      App,        AutoStartup,                %AutoStartup%
-    IniRead,    MainKey,                    %INI%,      App,        MainKey,                    %MainKey%
-    IniRead,    MainFont,                   %INI%,      App,        MainFont,                   %MainFont%
-    IniRead,    RestartKey,                 %INI%,      App,        RestartKey,                 %RestartKey%
+    if !FileExist(INI)
+        return
 
-    IniRead,    MainKeyHook,                %INI%,      App,        MainKeyHook,                %MainKeyHook%
-    IniRead,    RestartKeyHook,             %INI%,      App,        RestartKeyHook,             %RestartKeyHook%
-    IniRead,    RestartWhere,               %INI%,      App,        RestartWhere,               %RestartWhere%
-    IniRead,    LastTabSettings,            %INI%,      App,        LastTabSettings,            %LastTabSettings%
-
-    IniRead,    AutoSwitch,                 %INI%,      Menu,       AutoSwitch,                 %AutoSwitch%
-    IniRead,    ShowAlways,                 %INI%,      Menu,       ShowAlways,                 %ShowAlways%
-    IniRead,    ShowNoSwitch,               %INI%,      Menu,       ShowNoSwitch,               %ShowNoSwitch%
-    IniRead,    ShowAfterSettings,          %INI%,      Menu,       ShowAfterSettings,          %ShowAfterSettings%
-    IniRead,    ShowAfterSelect,            %INI%,      Menu,       ShowAfterSelect,            %ShowAfterSelect%
-    IniRead,    CloseDialog,                %INI%,      Menu,       CloseDialog,                %CloseDialog%
-    IniRead,    ShortPath,                  %INI%,      Menu,       ShortPath,                  %ShortPath%
-    IniRead,    PathNumbers,                %INI%,      Menu,       PathNumbers,                %PathNumbers%
-    IniRead,    ShowDriveLetter,            %INI%,      Menu,       ShowDriveLetter,            %ShowDriveLetter%
-    IniRead,    ShortenEnd,                 %INI%,      Menu,       ShortenEnd,                 %ShortenEnd%
-    IniRead,    ShowFirstSeparator,         %INI%,      Menu,       ShowFirstSeparator,         %ShowFirstSeparator%
-
-    IniRead,    DirsCount,                  %INI%,      Menu,       DirsCount,                  %DirsCount%
-    IniRead,    DirNameLength,              %INI%,      Menu,       DirNameLength,              %DirNameLength%
-
-    IniRead,    PathSeparator,              %INI%,      Menu,       PathSeparator,              %PathSeparator%
-    IniRead,    ShortNameIndicator,         %INI%,      Menu,       ShortNameIndicator,         %ShortNameIndicator%
-
-    IniRead,    MainIcon,                   %INI%,      App,        MainIcon,                   %A_Space%
-    IniRead,    GuiColor,                   %INI%,      Colors,     GuiColor,                   %A_Space%
-    IniRead,    MenuColor,                  %INI%,      Colors,     MenuColor,                  %A_Space%
+    try {
+        IniRead, Values, % INI, Global
+        for Variable, Value in Object(StrSplit(Values, ["`n", "="]))
+            %Variable% := Value
+    }
+    Values := ""
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
-ValidateWriteKey(ByRef sequence, ByRef paramName, ByRef funcName := "", ByRef state := "On", ByRef useHook := false) {
+ValidateKey(ByRef paramName, ByRef sequence, ByRef useHook, ByRef state := "On", ByRef funcName := "") {
 ;─────────────────────────────────────────────────────────────────────────────
+    /*
+        Replaces chars / letters in sequence with
+        standard modifiers ! ^ + #
+        and SC codes, e.g. Q -> sc10
+
+        If converted, returns the string of the form "paramName=result",
+        otherwise returns empty string
+    */
     global INI
 
     try {
-        ; Convert sequence to Scan Codes (if not converted)
-        if !(sequence ~= "i)sc[a-f0-9]+") {
+        if (sequence ~= "i)sc[a-f0-9]+") {
+            _key := sequence
+        } else {
+            ; Convert sequence to Scan Codes (if not converted)
             _key := ""
             Loop, parse, sequence
             {
                 if (!(A_LoopField ~= "[\!\^\+\#<>]")
                     && _scCode := GetKeySC(A_LoopField)) {
+                    ; Not a modifier, found scancode
                     _key .= Format("sc{:x}", _scCode)
                 } else {
+                    ; Don't change
                     _key .= A_LoopField
                 }
             }
-        } else {
-            _key := sequence
         }
 
         _prefix := useHook ? "" : "~"
         if funcName {
-            ; Create new hotkey
+            ; Register new hotkey
             Hotkey, % _prefix . _key, % funcName, % state
 
             try {
                 ; Remove old if exist
-                IniRead, _old, % INI, App, % paramName, % _key
+                IniRead, _old, % INI, Global, % paramName, % _key
                 if (_old != _key) {
                     Hotkey, % "~" . _old, Off
                     Hotkey, % _old, Off
                 }
-                IniWrite, % _key, % INI, App, % paramName
             }
 
         } else {
             ; Set state for existing hotkey
             Hotkey, % _prefix . _key, % state
         }
+        return paramName "=" _key "`n"
 
     } catch _error {
         LogError(_error)
     }
+    return ""
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
-ValidateWriteColor(ByRef color, ByRef paramName) {
+ValidateColor(ByRef paramName, ByRef color) {
 ;─────────────────────────────────────────────────────────────────────────────
-    global INI
+    /*
+        Searches for a HEX number in any form, e.g. 0x, #, h
 
-    if !color {
-        try IniWrite, % A_Space, % INI, Colors, % paramName
-        return
+        If found, returns the string of the form "paramName=result",
+        otherwise returns empty string
+    */
+
+    if !color
+        return ""
+
+    if !(_matchPos := RegExMatch(color, "i)[a-f0-9]{6}$")) {
+        LogError(Exception("`'" color "`' is wrong color! Enter the HEX value", paramName))
+        return ""
     }
 
-    if !(_matchPos := RegExMatch(color, "i)[a-f0-9]{6}$"))
-        return LogError(Exception("`'" color "`' is wrong color! Enter the HEX value", paramName))
-
-    _result := SubStr(color, _matchPos)
-    try IniWrite, % _result, % INI, Colors, % paramName
+    return paramName . "=" . SubStr(color, _matchPos) . "`n"
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
-ValidateWriteString(ByRef string, ByRef paramName) {
+ValidateString(ByRef paramName, ByRef string) {
 ;─────────────────────────────────────────────────────────────────────────────
-    global INI
+    /*
+        Converts input value to string
 
-    _result := Format("{}", string)
-    try IniWrite, % _result, % INI, Menu, % paramName
+        If not empty, returns the string of the form "paramName=result",
+        otherwise returns empty string
+    */
+
+    if !string
+        return ""
+
+    return paramName . "=" . Format("{}", string) . "`n"
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
 ;
-ValidateWriteTrayIcon(ByRef icon, ByRef paramName) {
+ValidateTrayIcon(ByRef paramName, ByRef icon) {
 ;─────────────────────────────────────────────────────────────────────────────
-    global INI, MainIcon
+    /*
+        If the file exists, changes the tray icon
+        and returns a string of the form "paramName=result",
+        otherwise returns empty string
+    */
 
-    if !icon {
-        try IniWrite, % A_Space, % INI, App, % paramName
-        return
+    if !icon
+        return ""
+
+    if !FileExist(icon) {
+        LogError(Exception("Icon `'" icon "`' not found", "tray icon", "Specify the full path to the file"))
+        return ""
     }
 
-    if !FileExist(icon)
-        return LogError(Exception("Icon `'" icon "`' not found", "tray icon", "Specify the full path to the file"))
+    Menu, Tray, Icon, % icon
+    return paramName "=" icon "`n"
+}
 
-    Menu, Tray, Icon, %MainIcon%
-    try IniWrite, % icon, % INI, App, % paramName
+;─────────────────────────────────────────────────────────────────────────────
+;
+ValidateFile(ByRef filePath) {
+;─────────────────────────────────────────────────────────────────────────────
+    _extra := "Cant write data to the file"
+
+    if !filePath {
+        _extra := "File path is empty: `'" filePath "`'"
+    } else if !FileExist(filePath) {
+        _extra := "Unable to create file"
+    } else {
+        _file := FileOpen(filePath, "r")
+
+        if !IsObject(_file) {
+            FileGetAttrib, _attr, % filePath
+            _extra := "Unable to get access to the file"
+        } else {
+            _extra     := "`nRead existing `'" filePath "`'`n"
+
+            _firstLine := RTrim(_file.readLine(), " `r`n")
+            _extra     .= Format("Encoding: {} First line: {}, Size in bytes: {} HWND: {}`n"
+                                 , _file.encoding, _firstLine, _file.length, _file.handle)
+        }
+        _file.Close()
+
+        try {
+            FileGetAttrib, _attr, % filePath
+            _extra .= "File attributes: " _attr
+        }
+    }
+
+    return _extra "`n"
 }

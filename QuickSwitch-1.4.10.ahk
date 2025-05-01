@@ -30,7 +30,6 @@ ScriptName    := "QuickSwitch"
 MainIcon      := ""
 INI           := ScriptName ".ini"
 ErrorsLog     := "Errors.log"
-BugReportLink := "https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml"
 
 #Include <Log>
 #Include <Debug>
@@ -49,19 +48,19 @@ BugReportLink := "https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-
 #Include <SettingsFrontend>
 #Include <MenuFrontend>
 
-ValidateLog()
+InitLog()
 
 ;@Ahk2Exe-IgnoreBegin
 MainIcon := "QuickSwitch.ico"
-ValidateWriteTrayIcon(MainIcon, "MainIcon")
+ValidateTrayIcon("MainIcon", MainIcon)
 ;@Ahk2Exe-IgnoreEnd
 
 SetDefaultValues()
 ReadValues()
-ValidateAutoStartup()
+InitAutoStartup()
 
-ValidateWriteKey(MainKey,    "MainKey",    "ShowMenu",   "Off", MainKeyHook)
-ValidateWriteKey(RestartKey, "RestartKey", "RestartApp", "On",  RestartKeyHook)
+ValidateKey("MainKey",    MainKey,    MainKeyHook,    "Off", "ShowMenu")
+ValidateKey("RestartKey", RestartKey, RestartKeyHook, "On",  "RestartApp")
 
 Loop {
     ; Wait for any "Open/Save as" file dialog
@@ -85,7 +84,7 @@ Loop {
             GetPaths()
 
             ; Turn on hotkey to hide / show menu later
-            ValidateWriteKey(MainKey, "MainKey",, "On", MainKeyHook)
+            ValidateKey("MainKey", MainKey, MainKeyHook, "On")
 
             if IsMenuReady()
                 ShowMenu()
@@ -99,7 +98,7 @@ Loop {
 
     Sleep, 100
     WinWaitNotActive
-    ValidateWriteKey(MainKey, "MainKey",, "Off", MainKeyHook)
+    ValidateKey("MainKey", MainKey, MainKeyHook, "Off")
 
     ; Clean up
     if (SaveDialogAction && FingerPrint && DialogAction != "") {

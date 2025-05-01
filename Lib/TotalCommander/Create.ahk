@@ -1,7 +1,7 @@
 CreateTotalUserCommand(ByRef ini, ByRef cmd, ByRef internalCmd, ByRef param := "") {
     ; Creates cmd in specified ini config.
     ; "cmd" param must start with EM_
-    
+
     try {
         loop, 4 {
             ; Read the contents of the config until it appears or the loop ends with an error
@@ -22,20 +22,23 @@ CreateTotalUserCommand(ByRef ini, ByRef cmd, ByRef internalCmd, ByRef param := "
             }
 
             ; Create new section
-            FileAppend,
+            FileAppend, % "
             (LTrim
-            # Please dont add commands with the same name
-            [%cmd%]
-            cmd=%internalCmd%
-            param=%param%
+                # Please dont add commands with the same name
+                [" cmd "]
+                cmd="   internalCmd  "
+                param=" param        "
 
-            ), % ini
+            )", % ini
 
             sleep, 50 * A_Index
         }
         throw Exception("Unable to create configuration", "")
 
     } catch _e {
-        throw Exception("Please create this file manually: `'" ini "`'", "TotalCmd config", _e.what " " _e.message " " _e.extra)
+        throw Exception("Please create this file manually: `'" ini "`'"
+                        , "TotalCmd config"
+                        , _e.what " " _e.message " " _e.extra "`n"
+                        . ValidateFile(ini))
     }
 }
