@@ -37,7 +37,7 @@ As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big
 
 ## Feedback
 
-I really need your feedback! If something is not working for you, please [let me know](https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml). If you think that app can be improved, [write to me](https://github.com/JoyHak/QuickSwitch/issues/new?template=feature-request.yaml).
+**I really need your feedback!** If something is not working for you, please [let me know](https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml). If you think that app can be improved, [write to me](https://github.com/JoyHak/QuickSwitch/issues/new?template=feature-request.yaml).
 
 To ensure that the correct current paths always appear in the menu:
 - Disable localized folder names *(e.g. C:\Users, C:\Användare, ...).*                       
@@ -74,13 +74,14 @@ QuickSwitch is written in AutoHotkey, which uses WinAPI. It sends messages to ot
 
 6. Explore the available options in the menu, open the settings and experiment with them. Choose a convenient style and logic of the menu!
 
-##  Scripting
+## Scripting
 
 This script is written in the [Autohotkey language](https://en.m.wikipedia.org/wiki/AutoHotkey).
 
 1. [Download](https://www.autohotkey.com/download/) Autohotkey v1.1 and install it. 
 
-> PLEASE KEEP IN MIND: Autohotkey v1 is an **outdated version.** If you want to start learning the language, install `v2`. **Do not learn autohotkey v1 yourself** and use it exclusively to run old scripts. This script needs to be updated from `v1` to `v2` !
+> [!WARNING]
+> Autohotkey v1 is an **outdated version.** I'm using it temporarily. If you want to start learning the language, install `v2`. **Do not learn autohotkey v1 yourself** and use it exclusively to run old scripts. QuickSwitch needs to be updated from `v1` to `v2` !
 
 2. When the installation is complete, you are presented with another menu. Choose `Run AutoHotkey`.
 Once the AutoHotkey help file opens, you can read or close it now. 
@@ -100,7 +101,7 @@ Or installed from here: `C:\Program Files\AutoHotkey\UX\install-ahk2exe.ahk`
 "C:\Program Files\7-Zip\7zG.exe" a "%A_ScriptDir%\Releases\QuickSwitch 1.0".zip -tzip -sae -- "%A_ScriptDir%\QuickSwitch.ahk" "%A_ScriptDir%\Lib" "%A_ScriptDir%\QuickSwitch.ico"
 ```
 
-For compilation, you need to select the .exe AHK v1.1.+ with Unicode support. They can be found here:
+For compilation, you need to select the AHK `.exe` v1.1.+ with Unicode support *(e.g. Autohotkey U64.exe)*. It can be found here:
 ```powershell
 C:\Program Files\AutoHotkey\v1.1.37.02\AutoHotkeyU64.exe
 C:\Program Files\AutoHotkey\v1.1.37.02\AutoHotkeyU32.exe
