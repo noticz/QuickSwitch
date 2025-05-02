@@ -39,10 +39,20 @@ As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big
 
 I really need your feedback! If something is not working for you, please [let me know](https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml). If you think that app can be improved, [write to me](https://github.com/JoyHak/QuickSwitch/issues/new?template=feature-request.yaml).
 
-This version is aimed at high performance and is devoid of various checks. To ensure that the correct current paths always appear in the menu:
+To ensure that the correct current paths always appear in the menu:
 - Disable localized folder names *(e.g. C:\Users, C:\Användare, ...).*                       
 - Periodically open the file manager you need *(a big number of windows makes it difficult to find the last open manager).*
 - Do not keep virtual folders open *(e.g. coll://, Desktop, Rapid Access, ...).*
+
+QuickSwitch interacts with other applications, but the system may [restrict its access](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/user-account-control-allow-uiaccess-applications-to-prompt-for-elevation-without-using-the-secure-desktop). To avoid this, run QuickSwitch as an administrator or [disable UAC](https://superuser.com/a/1773044).
+
+<details><summary>Details</summary>
+
+QuickSwitch is written in AutoHotkey, which uses WinAPI. It sends messages to other file managers and receives information about the current file dialog and its contents. For these actions to work correctly, it is required that **the target process is not running as an administrator** or QuickSwitch is running with UI access (if it is not a compiled `.ahk` file) or as an administrator. The reason for this is [UIPI](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/user-account-control-allow-uiaccess-applications-to-prompt-for-elevation-without-using-the-secure-desktop):
+
+> User Interface Privilege Isolation (UIPI) implements restrictions in the Windows subsystem that prevent lower-privilege applications from sending messages or installing hooks in higher-privilege processes. Higher-privilege applications are permitted to send messages to lower-privilege processes. UIPI doesn't interfere with or change the behavior of messages between applications at the same privilege (or integrity) level.
+
+</details>
 
 ## Installation
 
