@@ -31,8 +31,7 @@ And of course you can customize the display of paths in the Menu:
 - Significantly improved performance.
 - Added minimalistic display of errors about incorrectly entered settings.
 
-As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big-Sur-2-Windows-10-Themes-861727886) or [CakeOS](https://www.deviantart.com/niivu/art/cakeOS-2-0-for-Windows-11-953541433) themes from Niivu and [XYplorer](https://www.xyplorer.com/index.php) file manager:
-![](https://github.com/JoyHak/QuickSwitch/blob/main/Images/xyplorer.png)
+As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big-Sur-2-Windows-10-Themes-861727886) or [CakeOS](https://www.deviantart.com/niivu/art/cakeOS-2-0-for-Windows-11-953541433) themes from Niivu and [XYplorer](https://www.xyplorer.com/index.php) file manager.
 
 
 ## Feedback
