@@ -12,7 +12,7 @@ body:
       label: Checks
       options:
         - label: >
-            I tried to fix the problem myself by reading the contents of the Errors.log
+            I tried to fix the problem by reading the Errors.log and restarting QuickSwitch as administrator
           required: true
   
   - type: textarea
