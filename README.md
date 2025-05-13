@@ -24,11 +24,12 @@ And of course you can customize the display of paths in the Menu:
 
 [The latest versions](https://github.com/JoyHak/QuickSwitch/releases) include the following features:
 
+- Significantly improved performance.
+- Added the ability to always show the Menu or enable always Auto Switch.
 - Added application auto-startup at Windows log-on.
 - The menu will display the paths from all open tabs starting from the current one. 
 - The path can be displayed in a shortened form.
 - Improved settings interface and additional customization options and features.
-- Significantly improved performance.
 - Added minimalistic display of errors about incorrectly entered settings.
 
 As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big-Sur-2-Windows-10-Themes-861727886) or [CakeOS](https://www.deviantart.com/niivu/art/cakeOS-2-0-for-Windows-11-953541433) themes from Niivu and [XYplorer](https://www.xyplorer.com/index.php) file manager.
@@ -37,6 +38,10 @@ As an addition I recommend the [BigSur](https://www.deviantart.com/niivu/art/Big
 ## Feedback
 
 **I really need your feedback!** If something is not working for you, please [let me know](https://github.com/JoyHak/QuickSwitch/issues/new?template=bug-report.yaml). If you think that app can be improved, [write to me](https://github.com/JoyHak/QuickSwitch/issues/new?template=feature-request.yaml).
+
+You can enforce the Menu in any application using the keyboard shortcut: `Ctrl+Shift+Alt+0`. You can use this feature to test whether QuickSwitch is working correctly in the (target) app in which Menu appears. **If it really works**, click _"Settings > Debug > Export"_ to export the app info file. [Open a suggestion](https://github.com/JoyHak/QuickSwitch/issues/new?template=feature-request.yaml) to add this app to QuickSwitch, attach exported file. 
+
+## Limitations
 
 To ensure that the correct current paths always appear in the menu:
 - Disable localized folder names *(e.g. C:\Users, C:\Användare, ...).*                       
