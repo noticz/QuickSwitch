@@ -50,7 +50,7 @@ To ensure that the correct current paths always appear in the menu:
 - Periodically open the file manager you need *(a big number of windows makes it difficult to find the last open manager).*
 - Do not keep virtual folders open *(e.g. coll://, Desktop, Rapid Access, ...).*
 
-QuickSwitch interacts with other applications, but the system may [restrict its access](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/user-account-control-allow-uiaccess-applications-to-prompt-for-elevation-without-using-the-secure-desktop). To avoid this, run QuickSwitch as an administrator or [disable UAC](https://superuser.com/a/1773044).
+QuickSwitch interacts with other applications, but the system may [restrict its access](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/user-account-control-allow-uiaccess-applications-to-prompt-for-elevation-without-using-the-secure-desktop). To avoid this, run QuickSwitch as an administrator, copy it to the `C:\Program Files` _(just paste `%ProgramFiles%` to the addressbar)_. You can also [disable UAC](https://superuser.com/a/1773044) to avoid similar problems with all applications.
 
 <details><summary>Details</summary>
 
@@ -58,63 +58,52 @@ QuickSwitch is written in AutoHotkey, which uses WinAPI. It sends messages to ot
 
 > User Interface Privilege Isolation (UIPI) implements restrictions in the Windows subsystem that prevent lower-privilege applications from sending messages or installing hooks in higher-privilege processes. Higher-privilege applications are permitted to send messages to lower-privilege processes. UIPI doesn't interfere with or change the behavior of messages between applications at the same privilege (or integrity) level.
 
+You can also safely [disable UAC](https://superuser.com/a/1773044) if you have a low-level or powerful antivirus _(Crowdstrike, Eset Endpoint Security)_ because it gives you more control over the programs you run. Modern viruses [does not require admin privileges](https://security.stackexchange.com/a/183149) to interact with the system. However, they can obtain admin rights by [exploiting a vulnerability](https://security.stackexchange.com/a/49370) or by modifying access rights to its directory.
 </details>
 
 ## Installation
+Subscribe to releases so you don't miss critical updates!
+![Subscribe](https://github.com/user-attachments/assets/57eb9a93-fc9d-4dfd-bfb0-00720c2911f1)
 
 1. [Download](https://github.com/JoyHak/QuickSwitch/releases) the latest version.
 
-> [Subscribe to releases](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/about-notifications#notifications-and-subscriptions) so you don't miss critical updates!
-
 2. Run `.exe` for your CPU architecture and check it's existence in the tray.
 
-3. Open different directories in a supported file manager.
+3. Open different directories in a supported file manager. E.g., open `C:\` in `Explorer`.
 
-> E.g., open `C:\` in `Explorer`.
+4. Open any application and try to open\save a file using it. E.g., open `Notepad` then `File - Open...`. Or try to [download](https://github.com/JoyHak/QuickSwitch/releases) any file.
 
-4. Open any application and try to open\save a file using it.
+5. Press `Ctrl+Q` and look at the paths in the Menu that opens. All directories opened in supported file managers will be displayed here.
 
-> E.g., open `Notepad` then `File - Open...`. Or try downloading any file.
-
-5. Press `Ctrl+Q` and look at the paths in the **menu** that opens. All directories opened in supported file managers will be displayed here.
-
-6. Explore the available options in the menu, open the settings and experiment with them. Choose a convenient style and logic of the menu!
-
-## Scripting
-
-This script is written in the [Autohotkey language](https://en.m.wikipedia.org/wiki/AutoHotkey).
-
-1. [Download](https://www.autohotkey.com/download/) Autohotkey v1.1 and install it. 
-
-> [!WARNING]
-> Autohotkey v1 is an **outdated version.** I'm using it temporarily. If you want to start learning the language, install `v2`. **Do not learn autohotkey v1 yourself** and use it exclusively to run old scripts. QuickSwitch needs to be updated from `v1` to `v2` !
-
-2. When the installation is complete, you are presented with another menu. Choose `Run AutoHotkey`.
-Once the AutoHotkey help file opens, you can read or close it now. 
-
-3. [Download](https://github.com/JoyHak/QuickSwitch/releases) the latest version of QuickSwitch.
-5.  Unpack `.zip` and run `QuickSwitch.ahk`. Check it's existence in the tray.
+6. Explore the available options in the _"Menu settings"_ and experiment with them. Choose a convenient style and logic of the menu!
 
 ## Compiling	
 
-`QuickSwitch.ahk` can be automatically compiled using `ahk2exe` which is here by default: `C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe` 
-It can be downloaded from here: https://github.com/AutoHotkey/Ahk2Exe
-Or installed from here: `C:\Program Files\AutoHotkey\UX\install-ahk2exe.ahk`
+`QuickSwitch.ahk` can be automatically compiled using `ahk2exe` and `7-zip` (CLI).
 
-`7-zip` is also needed to automatically create an archive with the required files: 
+<details><summary>Details</summary>
 
-```powershell
-"C:\Program Files\7-Zip\7zG.exe" a "%A_ScriptDir%\Releases\QuickSwitch 1.0".zip -tzip -sae -- "%A_ScriptDir%\QuickSwitch.ahk" "%A_ScriptDir%\Lib" "%A_ScriptDir%\QuickSwitch.ico"
-```
+`ahk2exe` is here by default: `C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe`. </br>
+It can be downloaded from here: https://github.com/AutoHotkey/Ahk2Exe </br>
+It can be installed using the script: `C:\Program Files\AutoHotkey\UX\install-ahk2exe.ahk` </br>
+</br>
+`7zG.exe` is also needed to automatically create an archive with the required files from `CMD / PWSH`: https://7-zip.org
+</details>
 
-For compilation, you need to select the AHK `.exe` v1.1.+ with Unicode support *(e.g. Autohotkey U64.exe)*. It can be found here:
+To compile, open `ahk2exe` and select the main file (e.g. `QuickSwitch-1.7.ahk`). Be sure to create the `Releases` directory next to this file! The necessary directives are already configured in main file, so you can immediately press `Convert`. 
+
+![compile](https://github.com/user-attachments/assets/99a689e0-5b54-4994-9bd8-f242ac51c76b)
+
+However, you can customize all the settings and click `Save` to automatically apply them to future releases of `QuickSwitch`. For manual compilation, you need to select the AHK `.exe` v1.1.+ with Unicode support *(e.g. Autohotkey U64.exe)*. It can be found here:
 ```powershell
 C:\Program Files\AutoHotkey\v1.1.37.02\AutoHotkeyU64.exe
 C:\Program Files\AutoHotkey\v1.1.37.02\AutoHotkeyU32.exe
 # version may vary
 ```
+> [!WARNING]
+> Autohotkey v1 is an **outdated version.** I'm using it temporarily. It is not recommended to save such settings if you are already using AHK v2 scripts!
 
-[Directives](https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#Bin) are used for compilation, but it can be set manually at each compilation using the `ahk2exe GUI`. But this is inconvenient because you will need to manually perform different actions each time you run it and you lose [the benefits of directives](https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#SetProp):
+But I use [compiler directives](https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#Bin) for automation. [The benefits of directives](https://www.autohotkey.com/docs/v1/misc/Ahk2ExeDirectives.htm#SetProp):
 
 > Script compiler directives allow the user to specify details of how a script is to be compiled via [Ahk2Exe](https://www.autohotkey.com/docs/v1/Scripts.htm#ahk2exe). Some of the features are:
 >
