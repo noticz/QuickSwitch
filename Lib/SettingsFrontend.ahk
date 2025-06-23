@@ -6,31 +6,36 @@
 */
 
 ShowSettings() {
-    global
-
-    ReadValues()
-    FromSettings := true
-
-    ; Options that affects subsequent controls
-    Gui, -E0x200 -SysMenu +AlwaysOnTop  ; hide window border and header
-    Gui, Font, q5, %MainFont%           ; clean quality
-    Gui, Color, %GuiColor%, %GuiColor%
-
-    ; Edit fields: fixed width, one row, max 6 symbols, no multi-line word wrap and vertical scrollbar
-    local edit := "w63 r1 -Wrap -vscroll"
-
-    ; Split settings to the tabs
-    Gui, Add, Tab3, -Wrap +Background +Theme AltSubmit vLastTabSettings Choose%LastTabSettings%, Menu|Short path|App
-
-    /*
-        To align "Edit" fields to the right after the "Text" fields,
-        we memorize the YS position of the 1st "Text" fields using the "Section" keyword.
-        Then when all the controls on the left are added one after another,
-        we add "Edits" on the right starting from the memorized YS position.
-        The X position is chosen automatically depending on the length of the widest "Text" field.
-    */
-
-    ;               type,     [ coordinates options     vVARIABLE       gGOTO       Section      ], title
+	global
+	
+	ReadValues()
+	FromSettings := true
+	
+	; Options that affects subsequent controls
+	; Noticz mod - Fix for settings/context menu if theme is darkmode on windows 10
+	GuiColorInverted := InvertedFullColor(GuiColor)
+	Gui, -E0x200 -SysMenu +AlwaysOnTop -DPIScale +HwndGuiHwnd 	; hide window border and header
+	if (UseLightTheme)
+		Gui, Font, q5, %MainFont%
+	else
+		Gui, Font, s7 c%GuiColorInverted%, %MainFont%
+	Gui, Color, %GuiColor%, %GuiColor%
+	
+	; Edit fields: fixed width, one row, max 6 symbols, no multi-line word wrap and vertical scrollbar
+	local edit := "w63 r1 -Wrap -vscroll"
+	
+	; Split settings to the tabs
+	Gui, Add, Tab3, -Wrap +Background +Theme AltSubmit vLastTabSettings Choose%LastTabSettings%, Menu|Short path|App
+	
+	/*
+		To align "Edit" fields to the right after the "Text" fields,
+		we memorize the YS position of the 1st "Text" fields using the "Section" keyword.
+		Then when all the controls on the left are added one after another,
+		we add "Edits" on the right starting from the memorized YS position.
+		The X position is chosen automatically depending on the length of the widest "Text" field.
+	*/
+	
+	;               type,     [ coordinates options     vVARIABLE       gGOTO       Section      ], title
     Gui,    Tab,    1       ;───────────────────────────────────────────────────────────────────────────────────────────────────────
 
     Gui,    Add,    CheckBox,   Section                 vAutoSwitch     checked%AutoSwitch%,        &Always Auto Switch
@@ -116,7 +121,39 @@ ShowSettings() {
 
     if (_winX && _winY)
         _pos := " x" _winX " y" _winY + 100
-
-    Gui, Show, % "AutoSize" _pos, Settings
-
+	
+	; Noticz mod - Fix for settings/context menu if theme is darkmode on windows 10
+	if (!UseLightTheme) {
+		GuiControlGet, strControlHwnd, Hwnd, OkButton
+		DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)
+		GuiControlGet, strControlHwnd, Hwnd, CancelButton
+		DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)
+		GuiControlGet, strControlHwnd, Hwnd, NukeButton
+		DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)	
+		GuiControlGet, strControlHwnd, Hwnd, ResetButton
+		DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)
+		GuiControlGet, strControlHwnd, Hwnd, DebugButton
+		DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)
+	}
+	
+	Gui, Show, % "AutoSize" _pos, Settings
+	
+	ControlGet, strControlHwnd, HWND, , msctls_hotkey321, ahk_id %Hwnd%
+	DllCall("uxtheme\SetWindowTheme", "ptr", strControlHwnd, "str", "DarkMode_Explorer", "ptr", 0)
+	
+	; Current checkbox state
+	ToggleShowAlways()
+	ToggleShortPath()
 }
+
+; Noticz mod - Fix for settings/context menu if theme is darkmode on windows 10
+InvertedFullColor(color) {
+	c1 := 0xFF & color >> 16
+	c2 := 0xFF & color >> 8
+	c3 := 0xFF & color
+	c1 := ((c1 < 0x80) * 0xFF) << 16
+	c2 := ((c2 < 0x80) * 0xFF) << 8
+	c3 := (c3 < 0x80) * 0xFF
+	Return Format("{:x}", c1 + c2 + c3)
+}
+
