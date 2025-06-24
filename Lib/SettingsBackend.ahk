@@ -1,4 +1,4 @@
-; These functions are responsible for the GUI Settings functionality and its Controls
+﻿; These functions are responsible for the GUI Settings functionality and its Controls
 ; Also contains additional out-of-category functions needed for the app
 
 NukeSettings() {
@@ -26,12 +26,18 @@ ResetSettings() {
 }
 
 SaveSettings() {
-    ; Write current GUI (global) values
-    Gui, Submit
-    WriteValues()
-    ReadValues()
-    DeleteDialogs()
-    InitAutoStartup()
+	; Write current GUI (global) values
+	Gui, Submit
+	WriteValues()
+	/*
+		; Noticz mmod - Getting an error when settings is pulled up again after using the direct hotkey way of pulling the menu up
+		; Maybe it's because I have the option show menu after leaving settings but error I'm getting is...
+		; SettingsFrontend.ahk Line 28: The same variable cannot be used more than once for vLastTabSettings 
+		ReadValues()
+		DeleteDialogs()
+		InitAutoStartup()
+	*/
+	Reload
 }
 
 RestartApp() {
