@@ -22,6 +22,9 @@ ResetSettings() {
 
     SetDefaultValues()
     WriteValues()
+    
+    InitAutoStartup()
+    InitDarkTheme()
     ShowSettings()
 }
 
@@ -30,12 +33,13 @@ SaveSettings() {
 	Gui, Submit
 	WriteValues()
 	/*
-		; Noticz mmod - Getting an error when settings is pulled up again after using the direct hotkey way of pulling the menu up
+		; Noticz mod - Getting an error when settings is pulled up again after using the direct hotkey way of pulling the menu up
 		; Maybe it's because I have the option show menu after leaving settings but error I'm getting is...
 		; SettingsFrontend.ahk Line 28: The same variable cannot be used more than once for vLastTabSettings 
 		ReadValues()
 		DeleteDialogs()
 		InitAutoStartup()
+		InitDarkTheme()
 	*/
 	Reload
 }
@@ -83,36 +87,10 @@ InitAutoStartup() {
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
-; Noticz mod - Fix for settings/context menu if theme is darkmode on windows 10
-CheckDarkThemeInit() {
-	;─────────────────────────────────────────────────────────────────────────────
-	Global GuiColor, MenuColor, UseLightTheme
-	; check SystemUsesLightTheme for Windows system preference
-	; https://www.autohotkey.com/boards/viewtopic.php?f=13&t=94661&hilit=dark#p426437
-	uxtheme := DllCall("GetModuleHandle", "str", "uxtheme", "ptr")
-	SetPreferredAppMode := DllCall("GetProcAddress", "ptr", uxtheme, "ptr", 135, "ptr")
-	FlushMenuThemes := DllCall("GetProcAddress", "ptr", uxtheme, "ptr", 136, "ptr")
-	RegRead, UseLightTheme, HKCU, SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme 
-	if (UseLightTheme) {
-		; Override the default colors
-		GuiColor := ""
-		DllCall(SetPreferredAppMode, "int", 0) ; *** 0 for NOT Dark
-	} else {
-		GuiColor = 202020
-		MenuColor = 202020
-		GuiColorInverted := InvertedFullColor(GuiColor)
-		
-		DllCall(SetPreferredAppMode, "int", 1) ; Dark
-	}
-	DllCall(FlushMenuThemes)
-}
-
-;─────────────────────────────────────────────────────────────────────────────
 ;
 ToggleShowAlways() {
 ;─────────────────────────────────────────────────────────────────────────────
-    global
-
+    global ShowAlways
     Gui, Submit, NoHide
     GuiControl, Disable%ShowAlways%, ShowNoSwitch
     GuiControl, Disable%ShowAlways%, ShowAfterSettings
@@ -124,8 +102,7 @@ ToggleShowAlways() {
 ToggleShortPath() {
 ;─────────────────────────────────────────────────────────────────────────────
     ; Hide or display additional options
-    global
-
+    global ShortPath
     Gui, Submit, NoHide
     GuiControl,, ShortPath, % "Show short path" . (ShortPath ? " indicate as" : "")
 

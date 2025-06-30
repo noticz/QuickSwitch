@@ -1,4 +1,4 @@
-/*
+﻿/*
     Contains functions for debugging and testing code.
     Any functions to test the performance of the code
     (other than logging) should be stored here.

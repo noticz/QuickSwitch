@@ -1,4 +1,4 @@
-GetPaths(ByRef array, ByRef elevatedDict, _autoSwitch := false) {
+﻿GetPaths(ByRef array, ByRef elevatedDict, _autoSwitch := false) {
     ; Requests paths from all applications whose window class
     ; is recognized as a known file manager class (in Z-order).
 

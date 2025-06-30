@@ -1,14 +1,13 @@
-AddElevatedName(ByRef winPid, ByRef elevatedDict) {
+﻿AddElevatedName(ByRef winPid, ByRef elevatedDict) {
     ; Updates the dictionary by "winPid" key.
     ; Returns true if script isn't elevated and value is aadded
 
     if (A_IsAdmin || elevatedDict.hasKey(winPid))
         return false
 
-    WinGet, _name, ProcessName, ahk_pid %winPid%
     elevatedDict["updated"] := true
     elevatedDict[winPid]    := {elevated:  IsProcessElevated(winPid)
-                              , name:      Format("{} ({})", SubStr(_name, 1, -4), winPid)}
+                              , name:      Format("{} ({})", GetProcessName(winPid), winPid)}
     return true
 }
 
@@ -53,7 +52,7 @@ IsProcessElevated(ByRef winPid) {
     static TOKEN_ELEVATION                   := 20
 
     ; For debugging only
-    WinGet, _name, ProcessName, ahk_pid %winPid%
+    _name := GetProcessName(winPid)
 
     ; https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess
     _winPid := DllCall("OpenProcess", "UInt", PROCESS_QUERY_INFORMATION, "Int", False, "UInt", winPid, "Ptr")
@@ -63,8 +62,9 @@ IsProcessElevated(ByRef winPid) {
         if ((_winPid = 0) || (_winPid = -1))
             throw Exception("Unable open process " _name, "open process", _winPid " is passed to kernel32\OpenProcess")
     }
-
+    
     ; https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocesstoken
+    DllCall("LoadLibrary", "str", "advapi32.dll", "ptr")
     if !(DllCall("advapi32\OpenProcessToken", "Ptr", _winPid, "UInt", TOKEN_QUERY | TOKEN_QUERY_SOURCE, "Ptr*", _tokenId := 0)) {
         DllCall("CloseHandle", "Ptr", _winPid)
 

@@ -1,6 +1,21 @@
-; Contains functions for interacting with processes and their windows
+﻿; Contains functions for interacting with processes and their windows
 
+GetWinProccess(ByRef id) {
+    ; Slice everything before .exe
+    WinGet, _name, ProcessName, ahk_id %id%
+    return SubStr(_name, 1, -4)
+}
+
+GetProcessName(ByRef pid) {
+    ; Slice everything before .exe
+    WinGet, _name, ProcessName, ahk_pid %pid%
+    return SubStr(_name, 1, -4)
+}
+
+;─────────────────────────────────────────────────────────────────────────────
+;
 GetProcessProperty(_property := "name", _rules := "") {
+;─────────────────────────────────────────────────────────────────────────────
     ; Gets the process property using "winmgmts".
     ; "rules" param must be a string "property=value [optional: AND, OR...]"
 
@@ -26,7 +41,7 @@ GetTotalConsolePid(ByRef totalPid) {
     ; Gets TC console prompt PID, throws readable error
 
     _pid := 0
-    loop, 5 {
+    loop, 3 {
         sleep 1000
 
         if (_pid := GetProcessProperty("ProcessId", "Name='cmd.exe' and ParentProcessId=" totalPid))

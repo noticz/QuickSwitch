@@ -1,23 +1,23 @@
-; These functions are responsible for the Context Menu functionality and its Options
+﻿; These functions are responsible for the Context Menu functionality and its Options
 
 Dummy() {
     Return
 }
 
-SelectPath(_showMenu := false, _name := "", _position := 1) {
+SelectPath(_showMenu := false, _attempts := 3, _name := "", _position := 1) {
     global DialogId, FileDialog, Paths, ElevatedApps
 
     _log := ""
-    loop, 3 {
+    loop, % _attempts {
         try {
             if !WinActive("ahk_id " DialogId)
-                return
+                return SendPath(Paths[_position])
 
-            if (FileDialog.call(Paths[_position]))
+            if (FileDialog.call(Paths[_position]), _attempts)
                 return _showMenu ? ShowMenu() : 0
 
         } catch _ex {
-            if (A_Index = 3)
+            if (A_Index = _attempts)
                 _log := _ex.what " " _ex.message " " _ex.extra
         }
     }
@@ -35,6 +35,29 @@ SelectPath(_showMenu := false, _name := "", _position := 1) {
     _msg  :=  _name ? "Menu selection" : "Auto Switch"
 
     LogError("Failed to feed the file dialog", _msg, _log)
+}
+
+;─────────────────────────────────────────────────────────────────────────────
+;
+SendPath(ByRef path) {
+;─────────────────────────────────────────────────────────────────────────────
+    ; Send path to the current file manager / active window
+    WinGet, _id, id, A
+    WinGet, _exe, ProcessPath, A
+    WinGetClass, _class, A
+
+    switch (_class) {
+        case "CabinetWClass":
+            SendExplorerPath(_id, path)
+        case "ThunderRT6FormDC":
+            Run, % _exe " /script=::goto """ path """"
+        case "dopus.lister":
+            Run, % _exe "\..\dopusrt.exe /cmd go """ path """"
+        case "TTOTAL_CMD":
+            Run, % _exe " /O /L=""" path """"
+        default:
+            Run, % _exe " """ path """"
+    }
 }
 
 ;─────────────────────────────────────────────────────────────────────────────
@@ -68,10 +91,14 @@ ToggleAutoSwitch() {
 ;
 ToggleBlackList() {
 ;─────────────────────────────────────────────────────────────────────────────
-    global DialogAction, SaveDialogAction
+    global
 
     DialogAction     := (DialogAction = -1) ? 0 : -1
     SaveDialogAction := true
+    
+    if BlackListExe {
+        FingerPrint := Exe
+    }
 
     if IsMenuReady()
        SendEvent ^#+0

@@ -1,4 +1,4 @@
-/*
+﻿/*
     This is the Context Menu which allows to select the desired path.
     Displayed and actual paths are independent of each other,
     which allows menu to display anything (e.g. short path)
@@ -33,7 +33,7 @@ AddMenuPaths(ByRef array, _function) {
         else
             _display .= _path
 
-        Menu, ContextMenu, Insert,, % _display, % _function        
+        Menu, ContextMenu, Insert,, % _display, % _function
         if (_index = PathLimit)
             return
     }
@@ -256,7 +256,9 @@ ShowMenu() {
 		AddMenuPathsFavorite(PathsFavorite, SelectMenuPath)
 		AddMenuOptions()
 	}
+	
 	Menu ContextMenu, Color, % MenuColor
-	WinActivate % "ahk_id " DialogId        ; Activate dialog in case of menu flickering
+	WinActivate, ahk_id %DialogId%          ; Activate dialog to prevent Menu flickering
 	Menu ContextMenu, Show, 0, 100          ; Show new menu and halt the thread
 }
+
