@@ -51,6 +51,10 @@ NumberOfRecents := 5
 
 #Include <SettingsFrontend>
 #Include <MenuFrontend>
+#Include <Addons>
+
+DllCall("AllocConsole")
+WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
 InitLog()
 SetDefaultValues()
@@ -64,80 +68,84 @@ InitDarkTheme()
 InitAutoStartup()
 
 Loop {
-    ; Wait for any "Open/Save as" file dialog
-    WinWaitActive, ahk_class #32770
-  
-    try {
-        DialogId   := WinActive("A")
-        FileDialog := GetFileDialog(DialogId, EditId)
-
-        if FileDialog {
-            ; This is a supported dialog
-            ; Switch focus to non-buttons to prevent accidental closing
-            try {
-                ControlFocus ToolbarWindow321, ahk_id %DialogId%
-                ControlSend,, {end}{space}, ahk_id %EditId%
-                Sleep 100
-            }
-
-            ; If there is any GUI left from previous calls...
-            Gui, Destroy
-
-            WinGet,          Exe,        ProcessName,    ahk_id %DialogId%
-            WinGetTitle,     WinTitle,                   ahk_id %DialogId%
-
-            FingerPrint   := Exe "___" WinTitle
-            FileDialog    := FileDialog.bind(SendEnter, EditId)
-
-            SelectMenuPath := Func("SelectPath").bind(ShowAfterSelect || ShowAlways, SelectPathAttempts)
-            
-            ; Get current dialog settings or use default mode (AutoSwitch flag)
-            ; Current settings override "Always AutoSwitch" mode (if they exist)
-            IniRead, BlackList, % INI, Dialogs, % Exe, 0
-            IniRead, Switch, % INI, Dialogs, % FingerPrint, % AutoSwitch
-            
-            DialogAction := Max(BlackList, Switch)
-            GetPaths(Paths := [], ElevatedApps, DialogAction = 1)
-
-            ; Turn on registered hotkey to show menu later
-            ValidateKey("MainKey", MainKey, MainKeyHook, "On")
-
+	; Wait for any "Open/Save as" file dialog
+	WinWaitActive, ahk_class #32770
+	
+	try {
+		DialogId   := WinActive("A")
+		FileDialog := GetFileDialog(DialogId, EditId)
+		
+		if FileDialog {
+			; This is a supported dialog
+			; Switch focus to non-buttons to prevent accidental closing
+			try {
+				ControlFocus ToolbarWindow321, ahk_id %DialogId%
+				ControlSend,, {end}{space}, ahk_id %EditId%
+				Sleep 100
+			}
+			
+			; If there is any GUI left from previous calls...
+			Gui, Destroy
+			
+			WinGet,          Exe,        ProcessName,    ahk_id %DialogId%
+			WinGetTitle,     WinTitle,                   ahk_id %DialogId%
+			
+			FingerPrint   := Exe "___" WinTitle
+			FileDialog    := FileDialog.bind(SendEnter, EditId)
+			
+			SelectMenuPath := Func("SelectPath").bind(ShowAfterSelect || ShowAlways, SelectPathAttempts)
+			
+			; Get current dialog settings or use default mode (AutoSwitch flag)
+			; Current settings override "Always AutoSwitch" mode (if they exist)
+			IniRead, BlackList, % INI, Dialogs, % Exe, 0
+			IniRead, Switch, % INI, Dialogs, % FingerPrint, % AutoSwitch
+			
+			DialogAction := Max(BlackList, Switch)
+			GetPaths(Paths := [], ElevatedApps, DialogAction = 1)
+			
+			; Turn on registered hotkey to show menu later
+			ValidateKey("MainKey", MainKey, MainKeyHook, "On")
+			
+			; Noticz mod - Only should pull up ahk_class #32770 dialogs that have an address
+			WinGetText, WinText, ahk_id %DialogId%
+			if (InStr(WinText, "Address:")) {
             if IsMenuReady()
-                SendEvent ^#+0
-
-            if ElevatedApps["updated"] {
-                if (Names := GetElevatedNames(ElevatedApps)) {
-                    LogError("Unable to obtain paths: " Names, "admin permission", "
+					SendEvent ^#+0
+			}
+			
+			if ElevatedApps["updated"] {
+				if (Names := GetElevatedNames(ElevatedApps)) {
+					LogError("Unable to obtain paths: " Names, "admin permission", "
                         (LTrim
 
                             Cant send messages to these processes: " Names "
                             Run these processes as non-admin or run " ScriptName " as admin | with UI access
 
                         )")
-                }
-                ElevatedApps["updated"] := false
-            }
-        }
-
-    } catch GlobalEx {
-        LogException(GlobalEx)
-    }
-
-    Sleep, 100
-    WinWaitNotActive
-    ValidateKey("MainKey", MainKey, MainKeyHook, "Off")
-
-    ; Save the selected option in the Menu if it has been changed
-    if (SaveDialogAction && FingerPrint && DialogAction != "") {
-        SaveDialogAction := false
-        try IniWrite, % DialogAction, % INI, Dialogs, % FingerPrint
-    }
+				}
+				ElevatedApps["updated"] := false
+			}
+		}
+		
+	} catch GlobalEx {
+		LogException(GlobalEx)
+	}
+	
+	Sleep, 100
+	WinWaitNotActive
+	ValidateKey("MainKey", MainKey, MainKeyHook, "Off")
+	
+	; Save the selected option in the Menu if it has been changed
+	if (SaveDialogAction && FingerPrint && DialogAction != "") {
+		SaveDialogAction := false
+		try IniWrite, % DialogAction, % INI, Dialogs, % FingerPrint
+	}
 }   ; End of continuous WinWaitActive loop
-
-LogError("An error occurred while waiting for the file dialog to appear. Restart " ScriptName " app manually"
+	
+	LogError("An error occurred while waiting for the file dialog to appear. Restart " ScriptName " app manually"
        , "main menu"
        , "End of continuous WinWaitActive loop in main file")
-
-ExitApp
-
-^#+0::ShowMenu()
+	
+	ExitApp
+	
+	^#+0::ShowMenu()
